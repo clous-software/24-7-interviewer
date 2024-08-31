@@ -1,7 +1,7 @@
 
 // app/api/waitlist/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { joinWaitlist } from '@/lib/waitlist'; // Adjust import path
+import { joinWaitlist } from '@/lib/waitlist';
 
 export async function POST(request: NextRequest) {
   try {

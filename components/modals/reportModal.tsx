@@ -33,7 +33,6 @@ const ModalReport = () => {
 
   async function onSubmit() {
     try {
-      mixpanel.track("Report");
       // Actualiza el estado a 'closed'
       const reportResult = await joinWaitlist(form.getValues("option")); // Pass the selected option to the API call
       if (reportResult.success) { // Asumiendo que joinWaitlist retorna un objeto con una propiedad 'success'

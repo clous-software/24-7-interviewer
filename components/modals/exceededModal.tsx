@@ -42,7 +42,6 @@ const ModalExceeded = ({
   
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      mixpanel.track("Invite Request");
       // Actualiza el estado a 'closed'
       const waitlistResult = await joinWaitlist(values.email);
       if (waitlistResult.success) {  // Asumiendo que joinWaitlist retorna un objeto con una propiedad 'success'

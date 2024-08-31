@@ -55,11 +55,7 @@ const formSchema = z.object({
 
 
 const SupportModal = () => {
-  const trackButtonClick = (Property: any) => {
-    mixpanel.track('Trigger', {
-    Name : Property,
-    Property: Property, });
-  };
+
   const [isSectionVisible, setIsSectionVisible] = useState(true);
   const [isMinimized, setIsMinimized] = useState(true);
   const router = useRouter();
@@ -120,7 +116,6 @@ const SupportModal = () => {
   
   const handleIconClick = () => {
     setIsSectionVisible(!isSectionVisible);
-    trackButtonClick("Support"); // Llama a trackButtonClick con el nombre del evento
   };
 
   const handleCallTeam = () => {
