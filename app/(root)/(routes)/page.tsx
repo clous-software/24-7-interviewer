@@ -373,7 +373,7 @@ useEffect(() => {
          // Remove content between "Title:" and "Share:"
 
          // Remove content between "Share:" and "Salary:"
-         const withoutTitleToSalary = response.replace(/Title:.*?USD/s, '');
+         const withoutTitleToSalary = response.replace(/Title:[\s\S]*?USD/g, '');
  
          // Remove "Description"
          const withoutDescription = withoutTitleToSalary.replace(/Description:/g, '\n');
@@ -475,15 +475,6 @@ useEffect(() => {
 };
 
 
-
-  useEffect(() => {
-    if (shouldGenerate) {
-      setShouldGenerate(false); // Restablece el indicador
-      // Realiza la lógica de generación de texto aquí
-      handleGenerateClick();
-    }
-  }, [shouldGenerate]);
-
   useEffect(() => {
     // Función para mostrar la sección después de 750ms
     const timeout = setTimeout(() => {
@@ -535,125 +526,6 @@ useEffect(() => {
     return currentDate !== nextDate;
   };
 
-  const handleGenerateClick = async () => {
-    if (isArrowButtonDisabled) return;
-    localStorage.removeItem('threadId');
-    setIsNotificationsMode(false);
-    setIsErrorFix(false);
-    setIsPlan(false);
-    setShowMore(false);
-    setShowCTA(false);
-    setShowSections(false);
-    setIsTyping(true);
-    setIsWaitingForResponse(true);
-    const stopWaitingCursor = showWaitingCursor();
-
-    const currentTimestamp = new Date().getTime();
-  
-    // Get stored click count and last click timestamp from session storage
-    let storedClickCount: number = parseInt(sessionStorage.getItem('clickCount') || '0');
-    let lastClickTimestamp: number = parseInt(sessionStorage.getItem('lastClickTimestamp') || '0');
-    let isPMFFeedbackReplied: boolean = sessionStorage.getItem('isPMFFeedbackReplied') === 'true';
-    let isExcessFeedbackReplied: boolean = sessionStorage.getItem('isExcessFeedbackReplied') === 'true';
-    let nextResetTime = parseInt(sessionStorage.getItem('nextResetTime') || '0');
-
-    // If stored values are null, initialize them
-    if (!storedClickCount || !lastClickTimestamp) {
-      storedClickCount = 0;
-      lastClickTimestamp = currentTimestamp;
-      nextResetTime = currentTimestamp + 6 * 60 * 60 * 1000; // 6 hours from now
-    }
-  
-    // Check if it's been more than an hour since the last click
-    const sixHours = 6 * 60 * 60 * 1000;
-
-    // Check if it's been more than 6 hours since the last click
-    if (currentTimestamp - lastClickTimestamp >= sixHours) {
-    // Reset the click count for a new 6-hour period
-    storedClickCount = 0;
-    lastClickTimestamp = currentTimestamp;
-    }
-
-    // Increment the click count
-    storedClickCount++;
-
-    if (currentTimestamp >= nextResetTime) {
-      // Reset the click count for a new 6-hour period
-      storedClickCount = 0;
-      lastClickTimestamp = currentTimestamp;
-      nextResetTime = currentTimestamp + sixHours; // Set the next reset time
-    }
-
-    if (storedClickCount > 3) {
-    // Only if AuthToken is none!
-    setIsAuthRequired(true);
-    console.log("You have exceeded the limit of 3 clicks per 6 hours.");
-    
-    }
-
-    // Check if the click count exceeds the limit for an hour (111 clicks per hour)
-    if (storedClickCount > 12) {
-    // Display a message or disable the button to indicate the limit is exceeded
-    setIsEventExcess(false);
-    console.log("You have exceeded the limit of 111 clicks per hour.");
-    }
-
-    // Check if it's been more than a week since the last click
-    if (currentTimestamp - lastClickTimestamp >= 7 * 24 * 60 * 60 * 1000) {
-      // Reset the click count for a new week
-      storedClickCount = 0;
-      lastClickTimestamp = currentTimestamp;
-    }
-
-    // Update session storage with the new click count and timestamp
-    sessionStorage.setItem('clickCount', storedClickCount.toString());
-    sessionStorage.setItem('lastClickTimestamp', lastClickTimestamp.toString());
-    sessionStorage.setItem('isPMFFeedbackReplied', isPMFFeedbackReplied.toString());
-    sessionStorage.setItem('isExcessFeedbackReplied', isExcessFeedbackReplied.toString());
-    sessionStorage.setItem('nextResetTime', nextResetTime.toString());
- 
-    console.log("Here's the userThreadMessage",userThreadMessage)
-    let reFormattedResponse = "";
-    let newResponse = "";
-
-    try {
-      userMessage = userMessage;
-      // if (isAuthRequired && !isAuthToken) {
-      //    return;
-      // }
-      const chatResponse = await createRiverRequest(userMessage);
-      setUserMessage("");
-      setLastResponse(chatResponse.response);
-      // if (chatResponse.response_candidate) {
-      //   setCandidateData(chatResponse.response_candidate);
-      // }
-      
-      localStorage.setItem('chatResponse', chatResponse.response);
-      newResponse = formatResponseText(chatResponse.response);
-      reFormattedResponse = formatResponseText(newResponse);
-
-        setIsFormattedResponse(false);
-        console.log("This is the chat response:", chatResponse);
-        console.log("This is the new response:", newResponse);
-        console.log("This is the reformatted response:", reFormattedResponse);
-        setResponses((prevResponses) => [
-          ...prevResponses,
-          { userMessage, response: chatResponse.response },
-        ]);
-
-      
-    } catch (error) {
-      console.error(error);
-      console.log("Here's the chatResponse", response);
-      setIsErrorFix(true);
-      
-    } finally {
-      stopWaitingCursor();
-      setIsWaitingForResponse(false);
-      
-    }
-  };
-
   const simulateTyping = (textToType: string) => {
     const decodeHTMLEntities = (text: any) => {
       const textArea = document.createElement('textarea');
@@ -686,26 +558,6 @@ useEffect(() => {
     // Start the animation
     requestAnimationFrame(animateTyping);
     setIsTyping(false);
-  };
-  
-  
-  const handleClick = (cardTitle: string) => {
-    setUserMessage(cardTitle);
-    setShouldGenerate(true); // Activa la generación automática
-    setIsArrowButtonDisabled(false); // Habilita manualmente el botón de enviar
-  };
-
-  const handleReset = () => {
-    try {
-      window.location.href = "/";
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-
-  const handleStopClick = () => {
-    router.push(`https://petie.clous.app`);
   };
 
   const stripHtmlTags = (html: string) => {
@@ -992,7 +844,7 @@ useEffect(() => {
         {isErrorFix && (
             <aside className={`rounded-2xl flex flex-col`}>
               <h2 className="text-center text-sm font-semibold text-[#333333]">There was an error with the response. Try again.</h2>
-              <p className="text-base bg-primary text-secondary cursor-pointer hover:opacity-90 font-semibold py-1.5 px-4 rounded-full mx-auto mt-2" onClick={handleGenerateClick}>
+              <p className="text-base bg-primary text-secondary cursor-pointer hover:opacity-90 font-semibold py-1.5 px-4 rounded-full mx-auto mt-2" onClick={startRecording}>
                 Retry
               </p>
               
