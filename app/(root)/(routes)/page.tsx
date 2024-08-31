@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState, useCallback } from "react";
 import Textarea from 'react-expanding-textarea';
-import { createRiverRequest } from "@/app/api/ai/route";
+import { createRiverRequest } from "@/lib/ai";
 // import { getAudioVoice } from "@/app/api/ai/route";
 import { useRouter } from "next/navigation";
 import { PiWaveformBold, PiWaveform } from "react-icons/pi";
