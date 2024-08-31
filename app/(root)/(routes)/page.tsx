@@ -8,7 +8,6 @@ import { PiWaveformBold, PiWaveform } from "react-icons/pi";
 import Link from "next/link";
 import React from "react";
 import { useToast } from "@/components/ui/use-toast";
-import { v4 as uuidv4 } from 'uuid';
 import {
   Dialog,
   DialogContent,
