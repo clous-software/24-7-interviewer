@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/form";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { joinWaitlist } from "@/app/api/waitlist/route";
+import { joinWaitlist } from "@/lib/waitlist";
 import { useToast } from "@/components/ui/use-toast";
 import { useState } from "react";
 import { ToastAction } from "@/components/ui/toast";

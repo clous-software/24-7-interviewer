@@ -14,7 +14,7 @@ import {
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { joinWaitlist } from "@/app/api/waitlist/route"
+import { joinWaitlist } from "@/lib/waitlist";
 import { useToast } from "@/components/ui/use-toast"
 import { useState } from "react"
 import { ToastAction } from "@/components/ui/toast"
