@@ -16,7 +16,7 @@ import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../ui/select";
 import { Textarea } from "../ui/textarea";
-import FileInputButton from "@/components/ui/FileInputButton";
+import FileInputButton from "@/components/ui/fileInputButton";
 import Image from "next/image";
 import { ArrowUpRight, Minus, X } from "lucide-react";
 import { Card, CardContent } from "../ui/card";
