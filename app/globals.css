@@ -2,32 +2,414 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+* {
+  font-family: "Montserrat", sans-serif !important;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+html, body, :root {
+  height: 100%;
+  cursor: default;
+}
+
+h1{
+  font-size: 2rem;
+  font-weight: 600;
+} 
+ 
+@keyframes progressAnimation {
+  0% {  width: 0; }
+  100% {  width: 100%; }
+}
+
+.animate-progress {
+  animation: progressAnimation 4s linear infinite;
+}
+
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.2;
+  }
+  40% {
+    opacity: 0.4;
+  }
+  60% {
+    opacity: 0.6;
+  }
+  80% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes fadeOut {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 0;
+  }
+  40% {
+    opacity: 0.2;
+  }
+  60% {
+    opacity: 0.5;
+  }
+  80% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes fadeOutOne {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 0;
+  }
+  40% {
+    opacity: 0.2;
+  }
+  60% {
+    opacity: 0.5;
+  }
+  80% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes fadeOutTwo {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 0;
+  }
+  40% {
+    opacity: 0.2;
+  }
+  60% {
+    opacity: 0.5;
+  }
+  80% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes fadeOutThree {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 0;
+  }
+  40% {
+    opacity: 0.2;
+  }
+  60% {
+    opacity: 0.5;
+  }
+  80% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+.fadeIn {
+  animation-name: fadeIn;
+  animation-duration: 0.5s; /* Duración de la animación: entre 2 y 5 segundos */
+  animation-timing-function: linear; /* Función de temporización (opcional) */
+}
+.fadeOut {
+  animation-name: fadeOut;
+  animation-duration: 0.5s; /* Duración de la animación: entre 2 y 5 segundos */
+  animation-timing-function: ease-in-out; /* Función de temporización (opcional) */
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+.fadeOutOne {
+  animation-name: fadeOut;
+  animation-duration: 0.25s; /* Duración de la animación: entre 2 y 5 segundos */
+  animation-timing-function: ease-in-out; /* Función de temporización (opcional) */
+}
+.fadeOutTwo {
+  animation-name: fadeOut;
+  animation-duration: 1s; /* Duración de la animación: entre 2 y 5 segundos */
+  animation-timing-function: ease-in-out; /* Función de temporización (opcional) */
+}
+.fadeOutThree {
+  animation-name: fadeOut;
+  animation-duration: 1.5s; /* Duración de la animación: entre 2 y 5 segundos */
+  animation-timing-function: ease-in-out; /* Función de temporización (opcional) */
+}
+
+
+body::-webkit-scrollbar, main::-webkit-scrollbar, html::-webkit-scrollbar, div::-webkit-scrollbar, #boards::-webkit-scrollbar , .no-resize::-webkit-scrollbar, section::-webkit-scrollbar, p::-webkit-scrollbar,  textarea::-webkit-scrollbar, td::-webkit-scrollbar{
+  display: none ;
+}
+
+.no-resize{
+  font-stretch:none !important;
+  resize: none;
+}
+
+strong {
+  font-weight: 600;
+}
+
+.cursorRound {
+  background-color: #f26c21;
+  border-radius: 50%;
+  width: 10px;  /* Adjust the width of the cursor */
+  height: 10px; /* Adjust the height of the cursor */
+  display: inline-block;
+}
+
+.cursorNone {
+  background-color: transparent;
+  border-radius: 50%;
+  width: 10px;  /* Adjust the width of the cursor */
+  height: 10px; /* Adjust the height of the cursor */
+  display: inline-block;
+}
+
+.fade-in {
+  opacity: 0;
+  transition: opacity 100 ease-in-out; /* Adjust the transition duration and timing function */
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+ h1 {
+  font-size: 2rem;
+}
+
+ h2  {
+  font-size: 1.875rem;
+  font-weight: 600;
+}
+
+ h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+ }
+
+ h4 {
+  font-size: 1.125rem;
+  font-weight: 600;
+ }
+
+ em {
+  font-weight: 500;
+ }
+
+ .accordion-content {
+  position: relative;
+  transition: max-height 0.3s ease-in-out;
+}
+
+/* Add this to your CSS or stylesheet */
+.minimized-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2px; /* Adjust the gap as needed */
+  padding: 10px; /* Add some padding to the minimized form */
+  background-color: #fff; /* Add a background color to distinguish it */
+  border: 1px solid #ccc; /* Add a border to the minimized form */
+}
+
+
+.accordion-content::after {
+  content: '';
+  display: block;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 100%;
+  background: linear-gradient(0deg, hsl(var(--background)), rgba(255, 255, 255, 0));
+  pointer-events: none;
+  z-index: 1;
+}
+
+.accordion-content.max-h-36::after {
+  background: linear-gradient(0deg, hsl(var(--background)), hsla(0, 0%, 100%, 0));
+}
+
+.accordion-content.max-h-full::after {
+  background: hsl(220, 13%, 91%)
+}
+
+
+
+@layer base {
+  :root {
+    --background: 0 0% 98%;
+    --muted: 0 0% 20% ;
+
+    --card:  0 0% 98%;
+    --muted: 0 0% 20% ;
+
+   /*  --gray: 0 0% 87%; */
+    --gray: 0 0% 85%;
+    --gray-foreground: 0 0% 42%;
+ 
+    --popover: 0 0% 98%;
+ 
+    --primary: 22 89% 54%;
+    --primary-foreground: 0 0% 98%;
+ 
+    --secondary: 0 0% 100%;
+    --secondary-foreground: 19 100% 93%;
+ 
+    --muted: 330 2% 19.5%;
+    --muted-foreground: 60 3% 82% ;
+ 
+    --green: 120 61 34;
+    --green-foreground: 120 61 34;
+
+    --accent: 220 13% 91%;
+    --accent-foreground: 9 97% 86%;
+ 
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 21 100% 92%;
+/*     --destructive-foreground: 30 53% 64%;
+ */
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 110 100% 87%;
+
+    --success: 110 100% 87%;
+ 
+    --radius: 0.5rem;
+
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+  }
+ 
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+ 
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+
+/*     --white-gray: 0 0% 87%;
+    --gray: 0 0% 42%; */
+ 
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+ 
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+ 
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+ 
+    --muted: 0 0% 14.9%;
+    --muted-foreground:  0 0% 42%;
+ 
+    --accent: 0 0% 14.9%; 
+    --accent-foreground: 0 0% 98%;
+ 
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+ 
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+.underAnimation {
+  @apply relative
+ } 
+ .underAnimation::after {
+  @apply content-[''] bg-[#333333] h-[3px] w-[100%] left-0 -bottom-[2px] rounded-xl absolute duration-300
+ } 
+ .underAnimation:hover::after {
+  @apply w-[80%]
+ }
+ 
+.sidebar {
+  position: fixed;
+  top: 56px; /* This corresponds to mt-14 */
+  right: -29rem; /* Sidebar initially off-screen */
+  height: auto;
+  max-height: 80%;
+  border: 15%;
+  background-color: hsl(var(--background)); /* Background color of the sidebar */
+  transition: transform 0.6s ease-in-out; /* Smooth transition for transform */
+  overflow-y: auto; /* Allows scrolling if content exceeds max-height */
+}
+
+
+.sidebar.open {
+  transform: translateX(0); /* Mostrar el sidebar desplazándolo desde la derecha hacia la izquierda */
+}
+
+.sidebar.closed {
+  transform: translateX(-29rem); /* Ocultar el sidebar desplazándolo hacia la derecha */
+}
+
+.sidebar.closedmore {
+  transform: translateX(-34rem); /* Ocultar el sidebar desplazándolo hacia la derecha */
+}
+ 
+.secondary-sidebar {
+  position: fixed;
+  right: -29rem; /* Sidebar initially off-screen */
+  height: 100%;
+  background-color: hsl(var(--background)); /* Background color of the sidebar */
+  transition: transform 0.6s ease-in-out; /* Smooth transition for transform */
+  overflow-y: auto; /* Allows scrolling if content exceeds max-height */
+}
+
+
+.secondary-sidebar.open {
+  transform: translateX(0); /* Mostrar el sidebar desplazándolo desde la derecha hacia la izquierda */
+}
+
+.secondary-sidebar.closed {
+  transform: translateX(-29rem); /* Ocultar el sidebar desplazándolo hacia la derecha */
+}
+
+.secondary-sidebar.closedmore {
+  transform: translateX(-34rem); /* Ocultar el sidebar desplazándolo hacia la derecha */
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }
