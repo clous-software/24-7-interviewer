@@ -139,156 +139,28 @@ type CompanyData = {
 };
 
 const Petie = () => {
-
-  const [companyData, setCompanyData] = useState<CompanyData | null>(null);
-  const [members, setMembers] = useState<User[]>([]);
-  const [conversationData, setConversationData] = useState<ConversationData | null>(null);
-  const [threadData, setThreadData] = useState<{ [key: string]: ConversationData[] }>({});
-
   
   const [showReplies, setShowReplies] = useState<{ [key: string]: boolean }>({});
 
   let [userMessage, setUserMessage] = useState("");
-  let [userThreadMessage, setUserThreadMessage] = useState("");
   const [response, setResponse] = useState("");
-  const [expanded, setExpanded] = useState(false);
-  const [chatOpened, setChatOpened] = useState(false);
-  const router = useRouter();
   const [isSectionVisible, setIsSectionVisible] = useState(false); // Estado para controlar la visibilidad
-  const [shouldGenerate, setShouldGenerate] = useState(true);
-  const [isWaitingForResponse, setIsWaitingForResponse] = useState(false);
   const [isTypingComplete, setIsTypingComplete] = useState(false);
-  const [isFirstTypingComplete, setIsFirstTypingComplete] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
-  const [showCTA, setShowCTA] = useState(false);
   const [isArrowButtonDisabled, setIsArrowButtonDisabled] = useState(true);
-  const [isCreateButtonDisabled, setIsCreateButtonDisabled] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const { toast } = useToast();
   const [showSections, setShowSections] = useState(false);
-  const [responses, setResponses] = useState<HistoryItem[]>([]);
-  const [isCopied, setIsCopied] = useState(false);
-  const [stopTyping, setStopTyping] = useState(false);
-  const [showMore, setShowMore] = useState(false);
   const [isEventExcess, setIsEventExcess] = useState(false);
   const [isFirstEver, setIsFirstEver] = useState(false);
-  const [isAuthRequired, setIsAuthRequired] = useState(false);
-  const [isExcessFeedback, setIsExcessFeedback] = useState(false);
-  const [isExcessFeedbackReplied, setIsExcessFeedbackReplied] = useState(false);
-  const [isPMFFeedbackReplied, setIsPMFFeedbackReplied] = useState(false);
-  const [isPMFFeedback, setIsPMFFeedback] = useState(false);
-  // const [isPersonaSaved, setPersonaSaved] = useState(false);
-  // const [isPersonaOpen, setIsPersonaOpen] = useState(false);
-  // const [isReportSaved, setReportSaved] = useState(false);
-  // const [isReportOpen, setIsReportOpen] = useState(false);
-  const [isPlanSaved, setPlanSaved] = useState(false);
-  const [isPlan, setIsPlan] = useState(false);
-  const [isEmailOpen, setIsEmailOpen] = useState(false);
-  const [isQuestionsOpen, setIsQuestionsOpen] = useState(false);
   // const [editedJob, setEditedJob] = useState<JobData | null>(null);
   const [isErrorFix, setIsErrorFix] = useState(false);
   // const [isMediaView, setIsMediaView] = useState(true);
   const [isVoiceMode, setIsVoiceMode] = useState(false);
-  const [isNotificationsMode, setIsNotificationsMode] = useState(false);
-  const [isFormattedResponse, setIsFormattedResponse] = useState(false);
-  const [isAuthToken, setIsAuthToken] = useState(false);
-  const [jobData, setJobData] = useState<Job[]>([]);
-  const [selectedJobId, setSelectedJobId] = useState<string | undefined>(undefined);
-  const [selectedThreadId, setSelectedThreadId] = useState<string | undefined>(undefined);
-  const [selectedCandidateId, setSelectedCandidateId] = useState<string | undefined>(undefined);
   const [lastResponse, setLastResponse] = useState("");
-  const [streamingResponse, setStreamingResponse] = useState(null);
-  const [isThreadOpen, setIsThreadOpen] = useState(false);
-  const [isThreadActive, setIsThreadActive] = useState(false);
-  const [isConversationReload, setIsConversationReload] = useState(false);
-  const [showMentions, setShowMentions] = useState(false);
-  const [teamMentions, setTeamMentions] = useState([]);
-  const [isDataGeneration, setIsDataGeneration] = useState(false);
-  const [candidateData, setCandidateData] = useState([]);
-  const [feedback, setFeedback] = useState(true);
-  const [isAssistance, setIsAssistance] = useState(true); // used for pre-defined prompts and 'smart actions'
-
-  const [showArrow, setShowArrow] = useState(false);
   const [isArtifact, setIsArtifact] = useState(false);
-  const [isHubMode, setIsHubMode] = useState(false);
-  const [profileUser, setProfileUser] = useState<User | null>(null);
 
   const chatContainerRef = useRef<HTMLElement | null>(null);
-  const lastUserMessageRef = useRef<HTMLElement | null>(null);
-  const [containerHeight, setContainerHeight] = useState<string>('12vh');
-  const [isScrollingUp, setIsScrollingUp] = useState(false);
-  const lastScrollTop = useRef(0);
-
-  const [isCandidateSearch, setIsCandidateSearch] = useState(false);
-  const [isJobSearch, setIsJobSearch] = useState(false);
-  const [isJobIdOpen, setIsJobIdOpen] = useState(false);
-  const [isCandidateIdOpen, setIsCandidateIdOpen] = useState(false);
-
-  const [resetTime, setResetTime] = useState('');
-
-  const [initialUserResponse, setInitialUserResponse] = useState("");
-  const [isInitialUserResponse, setIsInitialUserResponse] = useState(false);
-
-  const [isCandidateSearchOpen, setIsCandidateSearchOpen] = useState(false);
-
-  // useEffect(() => {
-  //   if (chatHistory.length > 0) {
-  //     setLastResponse(chatHistory[chatHistory.length - 1]);
-  //   }
-  // }, [chatHistory]);
-
-  // const handleUserMentionClick = (user) => {
-  //   const newMessage = userMessage.replace(/@\w*$/, `@${user.user.name}`);
-  //   setUserMessage(newMessage);
-  //   setShowSuggestions(false);
-  // };
-
-  const toggleReplies = (questionId: string) => {
-    setShowReplies((prevState) => ({
-      ...prevState,
-      [questionId]: !prevState[questionId],
-    }));
-  };
-
-  function getOnboardingData() {
-    const data = localStorage.getItem('onboardingData');
-    return data ? JSON.parse(data) : null;
-  }
-  
-  function constructAIPrompt() {
-    const onboardingData = getOnboardingData();
-    
-    if (!onboardingData) {
-      return "No onboarding data available.";
-    }
-  
-    const { role, careerPriority, learningPriority } = onboardingData;
-  
-    let prompt = `I am currently a ${role || 'professional'}`;
-  
-    if (careerPriority) {
-      prompt += ` looking to ${careerPriority.toLowerCase()}`;
-    }
-  
-    if (learningPriority) {
-      prompt += `. I'm interested in improving my ${learningPriority.toLowerCase()}`;
-    }
-  
-    prompt += `. Can you provide tailored advice and resources for my career development?`;
-  
-    return prompt;
-  }
-
-  
-
-  useEffect(() => {
-    const refreshToken = localStorage.getItem('refreshToken');
-    console.log("the auth token in refresh is:", refreshToken);
-    if (refreshToken) {
-      setIsAuthToken(true);
-    }
-  
-  }, []);
 
   useEffect(() => {
     // Check if the flag is set in local storage
@@ -324,156 +196,30 @@ const Petie = () => {
     return language.split('-')[1]?.toLowerCase() || '';
   };
 
-const handleCandidateSearch = () => {
-  setIsHubMode(true);
-  setIsCandidateSearch(true);
-};
 
-useEffect(() => {
-  const handleKeyDown = (event: KeyboardEvent) => {
-    if (event.metaKey && (event.key === "f" || event.key === "p" || event.key === "b" || event.key === "r")) {
-      // Your action when Cmd + F or Cmd + K is pressed
-      // For example, you can navigate to different pages
-      if (event.key === "f") {
-        window.location.href = "/feedback";
-      } else if (event.key === "p") {
-        window.location.href = "/";
-      } else if (event.key === "b") {
-        window.location.href = "/boards";
-      } else if (event.key === "r") {
-        window.location.href = "/research";
-      }
-    }
-  };
+// useEffect(() => {
+//   const handleKeyDown = (event: KeyboardEvent) => {
+//     if (event.metaKey && (event.key === "f" || event.key === "p" || event.key === "b" || event.key === "r")) {
+//       // Your action when Cmd + F or Cmd + K is pressed
+//       // For example, you can navigate to different pages
+//       if (event.key === "f") {
+//         window.location.href = "/feedback";
+//       } else if (event.key === "p") {
+//         window.location.href = "/";
+//       } else if (event.key === "b") {
+//         window.location.href = "/boards";
+//       } else if (event.key === "r") {
+//         window.location.href = "/research";
+//       }
+//     }
+//   };
 
-  document.addEventListener("keydown", handleKeyDown);
+//   document.addEventListener("keydown", handleKeyDown);
 
-  return () => {
-    document.removeEventListener("keydown", handleKeyDown);
-  };
-}, []);
-
-  const formatResponseText = (response: string) => {
-    console.log("Here's the response of the role:", response);
-    const candidateIdMatch = response.match(/candidateId:\s*([^\s>]+)/);
-    if (candidateIdMatch) {
-      const candidateId = candidateIdMatch[1];
-      setSelectedCandidateId(candidateId);
-      setIsCandidateIdOpen(true);
-    }
-
-    // Regex to match < search candidates >
-    const searchCandidatesMatch = response.match(/<\s*search candidates\s*>/i);
-    if (searchCandidatesMatch) {
-      handleCandidateSearch();
-      setIsCandidateSearchOpen(true);
-    }
-
-    if (response.trim().substring(0, 4).toLowerCase() === "role") {
-         // Remove content between "Title:" and "Share:"
-
-         // Remove content between "Share:" and "Salary:"
-         const withoutTitleToSalary = response.replace(/Title:[\s\S]*?USD/g, '');
- 
-         // Remove "Description"
-         const withoutDescription = withoutTitleToSalary.replace(/Description:/g, '\n');
- 
-         // Replace "Role:" with "###"
-         const roleFormatted = withoutDescription.replace(/^Role:/, '###');
-
-          // Replace other titles with bold formatting
-          const formattedWithBold = roleFormatted.replace(/^(\w+):/gm, '**$1**');
-
-        // Add line breaks after each section
-        const finalText = formattedWithBold.replace(/(\n\n)(\s*-\s)/g, '\n$2');
-
-        console.log("This is the first formatting!", finalText);
-
-        return finalText;
-    } else {
-        let formattedResponse = response;
-
-        formattedResponse = response.replace(/### Subject:/, '###');
-
-        formattedResponse = formattedResponse.replace(
-            /(^|[^#])#+ (.*?)(?=\n#+|$)/gm,
-            (match: string, p1: string, p2: string) => {
-                console.log("Match:", match);
-                console.log("Heading level:", p1.length);
-                console.log("Heading text:", p2);
-                let headerLevel: string;
-                switch (p1.length) {
-                    case 1:
-                        headerLevel = "1rem";
-                        break;
-                    case 2:
-                        headerLevel = "1.125rem";
-                        break;
-                    case 3:
-                        headerLevel = "1.25rem";
-                        break;
-                    case 4:
-                        headerLevel = "1.5rem";
-                        break;
-                    default:
-                        headerLevel = "1.5rem";
-                }
-                return `<strong style="font-size: ${headerLevel};">${p2}</strong>`;
-            });
-            // .replace(
-        //   /\*\*(.*?)\*\*/gm,
-        //   '<strong style="font-size: 1rem;">$1</strong>'
-        // );
-            
-        // Format bold and italic text
-        formattedResponse = formattedResponse.replace(
-          /\*\*\*(.*?)\*\*\*/gm,
-          '<br/><strong style="font-size: 1rem; font-style: italic;">$1</strong>'
-        ).replace(
-          /(^|\n)(?!(?:\d+\.\s))\*\*(.*?)\*\*/gm, 
-          '<br/><strong>$2</strong>'
-        ).replace(
-          /(\d+\.\s)\*\*(.*?)\*\*/gm, 
-          '$1<strong>$2</strong>'
-        ).replace(
-          /(^|\n)\*\*(.*?)\*\*/gm, 
-          '<br/><strong>$2</strong>'
-        ).replace(
-          /^(\d+)/gm,
-          '<br/>$1'
-        ).replace(
-          /([^\n])\*\*(.*?)\*\*/gm,
-          '$1<strong>$2</strong>'
-        );
-
-        // Format sentences starting with "-"
-        formattedResponse = formattedResponse.replace(
-          /(\n|^)([-*]) (.*?)(?=\n[-*] |$)/gm,
-          (match: string, p1: string, p2: string, p3: string) => {
-            // Replace the "-" or "* " with a bullet point
-            const bulletPoint = '&bull;';
-            // Add a line break after each bullet point
-            return `<li>${p3}</li>`;
-          }
-        );
-
-        // Format tables
-        formattedResponse = formattedResponse.replace(
-            /((?:\|.*?\|)(?:\n\|.*?\|)+)/gm,
-            (match: string) => {
-                let tableContent = match.replace(/\|/g, '</td><td>').replace(/\n/g, '</td></tr><tr>').replace(/<\/td><td>$/, '');
-                return `<table><tr>${tableContent}</tr></table>`;
-            }
-        );
-
-        setIsFormattedResponse(true);
-
-        return formattedResponse;
-      }
-    // Remove "Subject:" from lines starting with "###"
-
-};
-
+//   return () => {
+//     document.removeEventListener("keydown", handleKeyDown);
+//   };
+// }, []);
 
   useEffect(() => {
     // Función para mostrar la sección después de 750ms
@@ -762,7 +508,7 @@ useEffect(() => {
   };
 
   return (
-    <main className="relative h-full w-full items-center justify-center">
+    <main className="relative h-full w-full items-center justify-center  bg-[#FAFAFA] bg-pattern bg-gradient-to-br from-gray-50 to-gray-100">
     <head>
                  <title>Petie, 24/7 interview assistant</title>
        
