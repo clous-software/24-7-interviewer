@@ -510,11 +510,11 @@ const Petie = () => {
   return (
     <main className="relative h-full w-full items-center justify-center  bg-[#FAFAFA] bg-pattern bg-gradient-to-br from-gray-50 to-gray-100">
     <head>
-                 <title>Petie, 24/7 interview assistant</title>
+                 <title>Petie, 24/7 interview practice</title>
        
        <meta
          name="description"
-         content="Built for hiring teams, with industry knowledge to assist in daily tasks. Clous Peer is the latest AI model released by the Clous team."
+         content="Built to help candidates practice real-world interviews with an AI."
        />
                <meta name="robots" content="index, follow" />
    <meta name='image' content='https://clous.s3.eu-west-3.amazonaws.com/images/Intelligent+Application+Clous.webp' />
@@ -522,11 +522,11 @@ const Petie = () => {
        <meta property="og:type" content="website" />
        <meta
          property="og:title"
-         content="Peer, your hiring AI"
+         content="Petie, 24/7 interview practice"
        />
        <meta
          property="og:description"
-         content="Built for hiring teams, with industry knowledge to assist in daily tasks. Clous Peer is the latest AI model released by the Clous team."
+         content="Built to help candidates practice real-world interviews with an AI."
        />
       </head>
      <section className={`flex flex-col h-full w-full mx-auto my-auto  ${isFirstEver ? "overflow-hidden" : "lg:overflow-auto"} ${isArtifact ? "" : "lg:px-12"}`}>
