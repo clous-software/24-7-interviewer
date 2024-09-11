@@ -17,6 +17,7 @@ import ModalExceeded from "@/components/modals/exceededModal";
 // import ActionTooltip from "@/components/actions/ActionTooltip";
 import SupportModal from "@/components/modals/suportModal";
 import { IoArrowDown } from "react-icons/io5";
+import { IoVolumeMedium, IoVolumeMute } from "react-icons/io5";
 
 function formatTimeDifference(created_at: string): string {
   const createdAtDate = new Date(created_at);
@@ -159,6 +160,7 @@ const Petie = () => {
   const [isVoiceMode, setIsVoiceMode] = useState(false);
   const [lastResponse, setLastResponse] = useState("");
   const [isArtifact, setIsArtifact] = useState(false);
+  const [isVoiceMuted, setIsVoiceMuted] = useState(false);
 
   const chatContainerRef = useRef<HTMLElement | null>(null);
 
@@ -238,6 +240,9 @@ const Petie = () => {
     }, 500); // Ajusta la velocidad del parpadeo aquí
 
     return () => clearInterval(cursorInterval);
+  };
+  const handleMuteVoice = () => {
+    console.log("Clicked to mute voice");
   };
 
   useEffect(() => {
@@ -327,6 +332,7 @@ const Petie = () => {
   const [audioLevel, setAudioLevel] = useState(0);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [previousInputs, setPreviousInputs] = useState(""); 
 
   useEffect(() => {
     const handleVoiceMode = async () => {
@@ -347,9 +353,15 @@ const Petie = () => {
   const handleAudioResponse = async (chatResponse: any) => {
     try {
       console.log('API response:', chatResponse);
-      setUserMessage("");
       setLastResponse(chatResponse.response);
+      setUserMessage(chatResponse.userResponse);
 
+      // Update previous inputs with new Q&A
+      setPreviousInputs(prev => 
+        `${prev ? prev : ''}The previous response from the candidate:\n${chatResponse.userResponse}\n\nThe last AI response:\n${chatResponse.response}`
+      );
+  
+      
       // simulateTyping(lastResponse);
       // setIsTyping(false);
       console.log(chatResponse.audioBlob.type);
@@ -362,9 +374,17 @@ const Petie = () => {
       console.log('Blob Type:', chatResponse.audioBlob.type);
   
       // Create a new Audio object and play
+
+      // Create the audio URL and play it
       const audio = new Audio(audioUrl);
       await audio.play().catch(error => console.error('Audio playback error:', error));
 
+      // Update audio reference for stopping if needed
+      audioRef.current = audio;
+
+      // Reset input fields
+ 
+      // Restart recording after response ends
       audio.onended = () => {
         // Restart recording when AI response ends
         if (isVoiceMode) startRecording();
@@ -372,6 +392,8 @@ const Petie = () => {
 
       // Clean up the object URL after the audio has loaded
       audio.oncanplaythrough = () => URL.revokeObjectURL(audioUrl);
+
+
     } catch (error) {
       console.error('Error processing audio:', error);
     }
@@ -435,12 +457,13 @@ const Petie = () => {
           setAudioChunks([]);
           const formData = new FormData();
           formData.append('audio', audioBlob, 'audio.webm');
-  
+          formData.append('responses', previousInputs);
+ 
           try {
-            console.log('Sending audio data to API...');
+            console.log('Sending audio data to API...', formData);
+            console.log('Here is the previous inputs:', formData.get('responses'));
             const chatResponse = await createRiverRequest(formData);
             console.log('API response:', chatResponse);
-            setUserMessage("");
             console.log(chatResponse.audioBlob.type);
 
             await handleAudioResponse(chatResponse);
@@ -509,6 +532,7 @@ const Petie = () => {
 
   return (
     <main className="relative h-full w-full items-center justify-center  bg-[#FAFAFA] bg-pattern bg-gradient-to-br from-gray-50 to-gray-100">
+
     <head>
                  <title>Petie, 24/7 interview practice</title>
        
@@ -528,7 +552,31 @@ const Petie = () => {
          property="og:description"
          content="Built to help candidates practice real-world interviews with an AI."
        />
-      </head>
+      <link rel="icon" type="image/x-icon" href="https://clous.s3.eu-west-3.amazonaws.com/favicon.ico" />
+     </head>
+     <div className="fixed flex gap-3 items-center justify-center lg:absolute top-2 lg:top-6 right-2 lg:right-6 bottom-5 lg:bottom-auto">
+     <p
+          onClick={() => handleMuteVoice()}
+          className={`rounded-full max-h-[2rem] cursor-not-allowed flex items-center justify-center z-40 p-1 cursor-pointer min-h-[2rem] min-w-[2rem] lg:bottom-auto`}
+        >
+      {!isVoiceMuted ? (<IoVolumeMedium className="w-6 h-6 text-gray-foreground"/>) : (<IoVolumeMute className="w-6 h-6 text-primary"/>)}
+
+        </p>
+        <p
+          onClick={() => {
+            if (audioRef.current && !audioRef.current.paused) {
+              stopAIResponse();
+            } else {
+              toggleVoiceMode();
+            }
+          }}
+          className={`rounded-full max-h-[2rem] flex items-center justify-center z-40 text-secondary p-1 cursor-pointer min-h-[2rem] min-w-[2rem] ${isVoiceMode ? "bg-gray-foreground/10 text-gray-foreground" : "bg-primary"}`}
+        >
+
+            <PiWaveformBold className="w-4 h-4"/>
+        </p>
+     </div>
+
      <section className={`flex flex-col h-full w-full mx-auto my-auto  ${isFirstEver ? "overflow-hidden" : "lg:overflow-auto"} ${isArtifact ? "" : "lg:px-12"}`}>
           {isEventExcess && (<Dialog defaultOpen>
             <DialogTrigger asChild >
