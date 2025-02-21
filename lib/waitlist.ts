@@ -2,8 +2,6 @@ import axios, { AxiosError } from "axios";
 
 export const joinWaitlist = async (email: string): Promise<any> => {
   try {
-    // Get the CSRF token from cookies
-
     const response = await axios.post(`${process.env.API_URL}/api/waitlist/`, {
       email: email, is_candidate: true,
     });
@@ -18,5 +16,5 @@ export const joinWaitlist = async (email: string): Promise<any> => {
       console.error("Unexpected error:");
       throw new Error('Unexpected error while joining the waitlist.');
     }
-  } 
+  }
 }
